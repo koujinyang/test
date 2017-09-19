@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>网点展示</title>
+    <style>
+        html,body,ul,li,ol,dl,dd,dt,p,h1,h2,h3,h4,h5,h6,form,fieldset,legend,img,span,i,em,b,div,a,input{margin:0;padding:0;color: #000;}
+        a{text-decoration:none;}
+        ul,li{list-style:none;}
+        img{border:none;}
+        body{font-size:0.12rem;font-family: "Microsoft Yahei","微软雅黑";}
+        ul,li,ol,a,input,select,p,span,div,button{
+            font-family: "Microsoft Yahei","微软雅黑";
+            text-decoration: none;
+        }
+        h1,h2,h3,h4,h5,h6{font-weight:normal;}
+        body,html{height:100%;}
+        input[type="button"],input[type="submit"],input[type="reset"] {
+            -webkit-appearance: none;
+        }
+        table{
+            border-collapse:collapse;
+        }
+        .containerMap{
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            position: relative;
+        }
+        .searchBox{
+            position: absolute;
+            top:0.2rem;
+            left: 2%;
+            width: 95%;
+            background: #e6e6e6;
+            /*width: 250px;*/
+            padding: 1%;
+            z-index: 900;
+            border-radius: 0.1rem;
+            overflow: hidden;
+        }
+        .searchInput{
+            width: 75%;
+            height: 0.6rem;
+            line-height: 0.5rem;
+            font-size: 0.3rem;
+            float: left;
+            background: url("./images/LOGO.png") no-repeat 0.05rem 0.025rem #fff ;
+            background-size: 0.55rem 0.55rem;
+            padding: 0 0 0 9%;
+            /*border: 1px solid #ccc;*/
+            border:none;
+            outline: none;
+        }
+        .searchButton{
+            display: inline-block;
+            float: left;
+            width: 8%;
+            height: 0.6rem;
+            color: #fff;
+            /*letter-spacing: 1px;*/
+            /*background: #fff;*/
+            /*border: none;*/
+            /*outline: none;*/
+            /*margin-left: -5px;*/
+            /*-webkit-appearance: none;*/
+            /*-webkit-border-radius: 0;*/
+            background: url("./images/sousuo.png") no-repeat center #fff;
+            background-size: 0.4rem 0.4rem;
+            cursor: pointer;
+
+        }
+        .mapButton{
+            display: inline-block;
+            float: left;
+            width: 8%;
+            height: 0.6rem;
+            color: #fff;
+            background: url("./images/map.png") no-repeat center #fff;
+            background-size: 0.4rem 0.4rem;
+        }
+        .searchBoxOne{
+            width: 95%;
+            display: none;
+            position: relative;
+            top:0.93rem;
+            left: 2.48%;
+            z-index: 900;
+            padding: 0 0 0 0.01%;
+
+        }
+        .condition{
+            /*position: absolute;*/
+            /*top:72px;*/
+            /*left: 40px;*/
+            width: 0.386rem;
+            height: 0.3rem;
+            z-index: 999;
+            background: #fff;
+        }
+        .conditionText{
+            display: inline-block;
+            width: 0.193rem;
+            float: left;
+            line-height: 0.3rem;
+            text-align: center;
+            letter-spacing: 0.05rem;
+            /*border: 1px solid #fff;*/
+            color: #000000;
+            cursor: pointer;
+        }
+        .bule{
+            background-color: #3385ff;
+            color: #fff;
+        }
+        .tipBox{
+            width: 100%;
+            /*position: absolute;*/
+            /*top: 102px;*/
+            /*left: 40px;*/
+            background: #fff;
+            /*height: 20px;*/
+            z-index: 999;
+            /*display: none;*/
+        }
+
+        ul,li{
+            list-style: none;
+        }
+        .searchBoxLi{
+            padding: 0 0 0 0.3rem;
+            line-height: 0.5rem;
+            font-size: 0.3rem;
+            background: url("./images/sug_icons.png") no-repeat 0 center ;
+            background-size: 0.3rem;
+            color: #666;
+            cursor: pointer;
+        }
+        .liHover{
+            /*background: #F3F3F3;*/
+            background: url("./images/sug_icons.png") no-repeat 0 center #F3F3F3;
+            background-size: 0.3rem;
+        }
+        .circle{
+            border-radius: 6px;
+            border: solid 1px silver;
+            width: 0.5rem;
+            height: 0.3rem;
+            padding: 0.03rem;
+            text-align: center;
+            line-height: 0.3rem;
+            max-width: 0.5rem;
+            font-size: 0.2rem;
+            color:white;
+        }
+        .conditionBox{
+            width: 0.215rem;
+            padding: 0.1rem 0.15rem;
+            background: #e6e6e6;
+            position: absolute;
+            left: 0.2rem;
+            top: 0.2rem;
+            z-index: 999;
+            float: left;
+            border-radius: 5px;
+            display: none;
+        }
+        .conditionBoxRadio{
+            width: 95%;
+            padding: 1%;
+            /*background: #e6e6e6;*/
+            position: absolute;
+            left: 2%;
+            top: 1rem;
+            z-index: 888;
+            float: left;
+            border-radius: 5px;
+            display: inline-flex;
+            justify-content:space-between;
+        }
+        .distanceBox{
+
+            background: #fff;
+            height: 0.5rem;
+            line-height: 0.5rem;
+            padding: 0 10px;
+        }
+        .acceptanceType{
+            background: #fff;
+            margin-left: 0.5rem;
+            height: 0.5rem;
+            line-height: 0.5rem;
+            padding: 0 10px;
+        }
+        .goType{
+            background: #fff;
+            margin-left: 0.5rem;
+            height: 0.5rem;
+            line-height: 0.5rem;
+            padding: 0 10px;
+            display: none;
+        }
+        .inputLabel{
+            font-size: 0.3rem;
+        }
+        .conditionOption{
+            width: 100px;
+            text-align: center;
+            font-size: 16px;
+            line-height: 16px;
+            height: 28px;
+            color: #999;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+        .amap-overlays{
+            z-index: 999;
+        }
+        .locName{
+            position: relative;
+            background: #fff;
+            overflow: hidden;
+            z-index: 990;
+        }
+        .name{
+            line-height: 0.8rem;
+            border-bottom: 1px solid #999;
+            font-size: 0.3rem;
+            font-weight: 600;
+            padding: 0 0 0 10px;
+            color: #333333;
+            /*background: ;*/
+        }
+        .close{
+            position: absolute;
+            top:0;
+            right: 10px;
+            font-size: 0.6rem;
+            color: #999999;
+            cursor:pointer;
+        }
+        .imgBox{
+            padding: 10px 0;
+            display: inline-flex;
+            justify-content:center ;
+        }
+        .photo{
+            width: 45%;
+            height: 10%;
+        }
+        .margingBottom{
+            margin-bottom: 10px;
+        }
+        .paddLeft15{
+            padding-left: 15px;
+        }
+        .phoneditup{
+            text-align: center;
+        }
+        .gothere{
+            display: inline-block;
+            width: 50%;
+            line-height: 30px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #4285f4;
+            /*margin-left: 160px;*/
+            color: #fff;
+        }
+        .routeBox{
+            position: relative;
+            width: 95%;
+            display: none;
+            top:0.93rem;
+            left: 2.48%;
+            z-index: 900;
+            padding: 0 0 0 0.01%;
+            background-color: #3d93fd;
+            overflow: hidden;
+        }
+        .routeTypeBox{
+            position: relative;
+            width: 100%;
+            margin: 0 auto;
+            padding: 10px 0;
+            display: inline-flex;
+            justify-content:center ;
+            overflow: hidden;
+        }
+        .routeImg{
+            width: 20px;
+            height: 19px;
+            opacity: 0.5;
+        }
+        .option1{
+            opacity: 1;
+        }
+        .routimgBox{
+            display: inline-block;
+            float: left;
+            width: 73px;
+            height: 19px;
+            text-align: center;
+            cursor: pointer;
+            padding-top: 10px;
+        }
+        .closeBox{
+            position: absolute;
+            top:5px;
+            right: 20px;
+            font-size: 30px;
+            color: #ffffff;
+            cursor:pointer;
+            opacity: 0.5;
+        }
+        .start_end{
+            width: 300px;
+            /*margin: 0 auto;*/
+            /*background-color: red;*/
+            margin: 15px auto 30px;
+        }
+        .start,.end{
+            line-height: 40px;
+            background: #68aafc;
+            margin-top: 10px;
+        }
+        .start lable,.end lable{
+            font-size: 16px;
+            padding: 0 5px;
+            line-height: 25px;
+            color: #ffffff;
+            opacity: 0.5;
+        }
+        .start input,.end input{
+            border: none;
+            outline: none;
+            background-color: #68aafc;
+            line-height: 25px;
+            width: 205px;
+            color: #fff;
+            font-size: 14px;
+            opacity: 0.5;
+        }
+        .inputnow{
+            border-bottom:1px solid #40aede ;
+        }
+        .inputnow::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+            color: #ffffff;
+        }
+        .inputnow:-moz-placeholder, textarea:-moz-placeholder {
+            color: #ffffff;
+        }
+        .inputnow::-moz-placeholder, textarea::-moz-placeholder {
+            color: #ffffff;
+        }
+        .inputnow:-ms-input-placeholder, textarea:-ms-input-placeholder {
+            color: #ffffff;
+        }
+        #panel {
+            position: fixed;
+            background-color: white;
+            max-height: 90%;
+            overflow-y: auto;
+            top: 135px;
+            right: 40px;
+            width: 280px;
+            z-index:100;
+        }
+    </style>
+</head>
+<body>
+<div class="containerMap" id="container">
+    <!--搜索-->
+    <div class="searchBox">
+        <input type="text" class="searchInput" id="searchInput" placeholder="搜索派出所、中心站">
+        <!--<input type="button" value="搜索" class="searchButton">-->
+        <span class="searchButton" id="searchButton"></span>
+        <span class="mapButton" id="mapButton"></span>
+    </div>
+    <div class="searchBoxOne" id="searchBoxOne">
+        <!--<div class="condition" >-->
+        <!--<span class="conditionText bule" data-type="all">全部</span>-->
+        <!--<span class="conditionText " data-type="around">周边</span>-->
+        <!--</div>-->
+        <div class="tipBox" id="tipBox">
+            <ul class="">
+                <li class="searchBoxLi" data-lng="116.40081" data-lat="40.175534" data-title="小汤山派出所" data-address="昌平区小汤山大柳树环岛以西200米">小汤山派出所</li>
+                <li class="searchBoxLi" data-lng="116.201457" data-lat="40.222315" data-title="昌平派出所" data-address="昌平区西环路天泽苑小区底商">昌平派出所</li>
+                <li class="searchBoxLi" data-lng="116.21253" data-lat="40.214578" data-title="昌平区城南街道南郝庄村委会中心站" data-address='昌平区城南街道南郝庄村委会'>昌平区城南街道南郝庄村委会中心站</li>
+                <li class="searchBoxLi" data-lng="116.199017" data-lat="40.228182" data-title="昌平区城南街道邓庄村委会中心站" data-address='昌平区城南街道邓庄村委会'>昌平区城南街道邓庄村委会中心站</li>
+                <li class="searchBoxLi" data-lng="116.210473" data-lat="40.221007" data-title="昌平区城南街道北郝庄村委会中心站" data-address='昌平区城南街道北郝庄村委会'>昌平区城南街道北郝庄村委会中心站</li>
+                <!--<li class="searchBoxLi">昌平区城南街道南郝庄村委会中心站</li>-->
+                <!--<li class="searchBoxLi">昌平区城南街道邓庄村委会中心站</li>-->
+                <!--<li class="searchBoxLi">5</li>-->
+            </ul>
+        </div>
+    </div>
+    <!--周边全部 网店类型-->
+    <!--<div class="conditionBox">-->
+    <!--<select name="" class="conditionOption" id="condition">-->
+    <!--<option value="" selected="selected" data-type="all">全部</option>-->
+    <!--<option value="" data-type="around">周边</option>-->
+    <!--</select>-->
+    <!--<select name="" id="conditionType" class="conditionOption"  style="margin-left:10px;">-->
+    <!--<option value="" selected="selected" data-type="all">全部受理点</option>-->
+    <!--<option value="" data-type="djk">登记卡受理点</option>-->
+    <!--<option value="" data-type="jzz">居住证受理点</option>-->
+    <!--</select>-->
+    <!--</div>-->
+    <div class="conditionBoxRadio">
+        <!--<div class="distanceBox" id="distanceBox">-->
+            <!--<input type="radio" name="distance" id="distanceAll" checked="checked" data-type="all" />-->
+            <!--<label for="distanceAll" class="inputLabel">全部</label>-->
+            <!--<input type="radio" name="distance" id="distanceNearby" data-type="near"/>-->
+            <!--<label for="distanceNearby" class="inputLabel" style="margin-left: 10px">周边</label>-->
+        <!--</div>-->
+            <select name="" id="distanceBox" class="distanceBox">
+                <option value="全部" selected="selected" data-type="all" >全部</option>
+                <option value="周边"  data-type="near">周边</option>
+            </select>
+            <select class="acceptanceType" id="acceptanceType">
+                <option value="" selected="selected"  data-type="allType">全部受理点</option>
+                <option value="" data-type="djkType">登记卡受理点</option>
+                <option value="" data-type="jzzType">居住证受理点</option>
+            </select>
+            <select name="" id="goType" class="goType">
+                <option value="" selected="selected" data-type="walk">步行</option>
+                <option value=""  data-type="bus" >公交</option>
+                <option value=""  data-type="car" >驾车</option>
+            </select>
+
+        <!--<div class="acceptanceType" id="acceptanceType">-->
+            <!--<input type="radio" name="acceptance" id="allType"  checked="checked" data-type="allType">-->
+            <!--<label for="allType" class="inputLabel">全部受理点</label>-->
+            <!--<input type="radio" name="acceptance" id="djkTYpe" style="margin-left: 10px" data-type="djkType">-->
+            <!--<label for="djkTYpe" class="inputLabel">登记卡受理点</label>-->
+            <!--<input type="radio" name="acceptance" id="jzzTYpe" style="margin-left: 10px" data-type="jzzType">-->
+            <!--<label for="jzzTYpe" class="inputLabel">居住证受理点</label>-->
+        <!--</div>-->
+
+    </div>
+    <!--出行路线-->
+    <div class="routeBox" id="routeBox">
+        <div class="routeTypeBox">
+            <span class="routimgBox"><img src="./images/icon_walk.png" data-type="walk" class="routeImg option1" style="width: 12px;height: 19px;" alt="" title="步行" ></span>
+            <span class="routimgBox"><img src="./images/icon_bus.png"  data-type="bus" class="routeImg" style="width: 19px;height: 19px;" alt="" title="公交"></span>
+            <span class="routimgBox"><img src="./images/icon_car.png"  data-type="car" class="routeImg" style="width: 20px;height: 19px;" alt="" title="驾车"></span>
+        </div>
+        <div class="closeBox" id="routeClose">
+            <span>×</span>
+        </div>
+        <div class="start_end">
+            <div class="start" >
+                <lable >起</lable>
+                <input type="text" class="inputnow" id="inputnow" placeholder="当前位置" readonly>
+            </div>
+            <div class="end">
+                <lable >终</lable>
+                <input type="text" class="inputnow" placeholder="请输入终点位置" id="destination">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="panel"></div>
+<script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=06186eaa07045604875cfb790fda8c04"></script>
+<script>
+    function refresh() {
+        var deviceWidth = document.documentElement.clientWidth;
+        if (deviceWidth > 1080) {
+            document.documentElement.style.fontSize = 1080 / 10.8 + "px";
+        } else {
+            document.documentElement.style.fontSize = deviceWidth / 7.5 + "px";
+        }
+    }
+    refresh();
+    $(function () {
+        var settings = {
+            type: "GET",
+            url:"http://43.240.139.5:8080/maptagging/v1/branch-offices",
+            dataType:"json",
+            async:false,
+            headers: {
+                "X-Api-Key":"14e1b600b1fd579f47433b88e8d85291"
+            },
+            /*beforeSend: function(xhr){xhr.setRequestHeader('X-Api-Key','14e1b600b1fd579f47433b88e8d85291');},*/
+            error: function(e) {
+                console.log(e);
+                console.log(88);
+            },
+            success: function(data) {
+                console.log(data);
+                console.log(99);
+            }
+
+        };
+        $.ajax(settings);
+
+        var windowHeight=$(window).height();
+        $("#container").css("height",windowHeight);
+        //模糊查询
+        //获取焦点查询提示框显示
+        $("#searchInput").focus(function () {
+            $("#searchBoxOne").slideDown();
+
+        });
+        //失去焦点
+        $("#searchInput").blur(function () {
+//            setTimeout(function () {
+            $("#searchBoxOne").slideUp();
+//            },200)
+        });
+
+        var liIndex=0;
+        //鼠标移入
+        $("body").delegate(".searchBoxLi","mouseenter",function () {
+            $(this).addClass("liHover");
+//            $("#searchInput").val($(this).text());
+//            console.log($(this).index());
+            liIndex=$(this).index();
+        });
+        //鼠标一出
+        $("body").delegate(".searchBoxLi","mouseleave",function () {
+            $(this).removeClass("liHover");
+//            $("#searchInput").val($(this).text());
+        });
+        //点击事件
+        $("body").delegate(".searchBoxLi","click",function () {
+            $("#searchInput").val($(this).text());
+            liIndex=$(this).index();
+//            console.log($(this).index());
+
+        });
+        //键盘按键
+        $("#searchInput").keyup(function (e) {
+            var key =e.keyCode;
+//            console.log(liIndex);
+            if(key===38){
+                liIndex--;
+                if(liIndex===-1){
+                    liIndex=4;
+                }
+                $("#tipBox ul li").removeClass("liHover");
+                $("#tipBox ul li").eq(liIndex).addClass("liHover");
+                $("#searchInput").val($("#tipBox ul li").eq(liIndex).text());
+            }else
+            if(key===40){
+                liIndex++;
+                if(liIndex===5){
+                    liIndex=0;
+                }
+                $("#tipBox ul li").removeClass("liHover");
+                $("#tipBox ul li").eq(liIndex).addClass("liHover");
+                $("#searchInput").val($("#tipBox ul li").eq(liIndex).text());
+            }else if(key===13){
+                $("#searchBoxOne").slideUp();
+            }
+        });
+
+        //出行路线
+        //路线的切换
+//        $(".routimgBox").click(function () {
+//            $(this).find(".routeImg").addClass("option1");
+//            $(this).siblings().find(".routeImg").removeClass("option1");
+//        });
+
+        //点击导航出现路线查询
+        $("#mapButton").click(function () {
+            $("#searchBoxOne").slideUp();
+            $("#routeBox").slideDown();
+            $("#inputnow").val("当前位置");
+            $("#distanceBox,#acceptanceType,#goType").slideUp();
+        });
+        //引入地图
+        var mapObj = new AMap.Map('container',{
+            resizeEnable:true,
+            zoom:10
+        });
+        //定位
+        //自己的位置
+        var myPositio=[];
+        var lnglat = "";
+        //自己的位置汉字
+        var formattedAddress="";
+        var haveway=false;
+        mapObj.plugin('AMap.Geolocation', function () {
+            geolocation = new AMap.Geolocation({
+                enableHighAccuracy: true,//是否使用高精度定位，默认:true
+                timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+                maximumAge: 0,           //定位结果缓存0毫秒，默认：0
+                convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+                showButton: true,        //显示定位按钮，默认：true
+                buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
+                buttonOffset: new AMap.Pixel(10, 100),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+                showMarker: false,        //定位成功后在定位到的位置显示点标记，默认：true
+                markerOptions:{
+                    zIndex:150,
+                    icon:"./images/myposion.png",
+                    animation:"AMAP_ANIMATION_DROP",
+                    title:"我的位置"
+                },
+                showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
+                panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
+                zoomToAccuracy:false      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+            });
+            mapObj.addControl(geolocation);
+            //返回用户的精准信息
+            geolocation.getCurrentPosition(function(status,result){
+                mapObj.clearMap();
+                console.log(result);
+                myPositio=[result.position.lng,result.position.lat];
+                formattedAddress=result.formattedAddress;
+                //判断标记点距离我的位置的距离
+                lnglat = new AMap.LngLat(myPositio[0],myPositio[1]);
+            });
+            AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+            AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+        });
+        //定位的圆圈
+        var circle='';
+        //我的位置
+        var myMarker='';
+        //定位完成后函数
+        function onComplete(onCompleteData){
+            haveway=false;
+            //清空所有
+            mapObj.clearMap();
+            $("#distanceBox,#acceptanceType").slideDown();
+            $("#goType").slideUp();
+            //我的位置
+            myMarker=new  AMap.Marker({
+                title:"我的位置",
+                position:myPositio,
+                icon:"./images/myposion.png",
+                animation:"AMAP_ANIMATION_DROP",
+                zIndex:150
+            });
+            //定义圆圈
+            circle=new AMap.Circle({
+//                map: mapObj,
+                center:myPositio,
+                radius:2000,
+                strokeColor:"#0d4497",
+                strokeOpacity:0.4,
+                fillColor:"#0d4497",
+                fillOpacity:0.1
+            });
+            $.ajax({
+                type:"get",
+                url:"./js/location.json",
+                async:false,
+                dataType:"json",
+                success:function (res) {
+                    //创建一级标注点
+                    var createMarker=function (data) {
+                        var div = document.createElement('div');
+                        div.className = 'circle';
+                        div.style.backgroundColor = '#393';
+                        div.innerHTML = data.content || 0;
+                        var marker = new AMap.Marker({
+                            content: div,
+                            title:data.name,
+                            position: data.posion,
+                            code:data.code,
+                            offset: new AMap.Pixel(-24, 5)
+                        });
+                        marker.setMap(mapObj);
+                        return marker;
+                    };
+                    //创建二级标注
+                    var createMarkerTwo=function (data) {
+                        var icon="";
+                        if(data.type==="1"){
+                            icon='./images/lan.png';
+                        }else if(data.type==="2"){
+                            icon='./images/lu.png';
+                        }else if(data.type==="3"){
+                            icon='./images/ju.png';
+                        }
+                        var marker=new  AMap.Marker({
+                            title:data.name,
+                            position:[data.lng,data.lat],
+                            address:data.address,
+                            code:data.code,
+                            icon:icon
+                        });
+                        marker.setMap(mapObj);
+                        return marker;
+                    };
+                    //点击搜索
+                    var searchMarker=[];
+                    $("#searchButton").click(function () {
+//                        var text=$("#searchInput").val();
+//                        searchPsotion();
+                        $("#searchInput").val("");
+//                        var data={
+//                            text:text
+//                        };
+                        var title=$("#tipBox ul li").eq(liIndex).attr('data-title');
+                        var lng=$("#tipBox ul li").eq(liIndex).attr('data-lng');
+                        var lat=$("#tipBox ul li").eq(liIndex).attr('data-lat');
+                        var address=$("#tipBox ul li").eq(liIndex).attr('data-address');
+                        //发送ajax获取查询位置的信心
+//                        $.ajax({
+//                            url:"./js/location.json",
+//                            data:data,
+//                            type:"get",
+//                            async:true,
+//                            success:function (res) {
+                                mapObj.setZoom(13);
+//                                setTimeout(function () {
+                                console.log(res.data1[1]);
+                                searchMarker=[];
+                                var marker=new  AMap.Marker({
+                                    title:title,
+                                    position:[lng,lat],
+                                    code:'00001',
+                                    icon:"./images/lu.png",
+                                    address:address
+                                });
+                                searchMarker.push(marker);
+                                mapObj.clearMap();
+                                marker.setMap(mapObj);
+                                //添加我的位置
+                                mapObj.add(myMarker);
+                                mapObj.setCenter([lng,lat]);
+                                AMap.event.addListener(marker, 'click', _onClickTwo);
+//                                },1000)
+
+//                            }
+
+//                        })
+                    });
+                    function searchPsotion() {
+                        console.log(111);
+                        mapObj.setZoom(13);
+                        searchMarker=[];
+                        var title=$("#tipBox ul li").eq(liIndex).attr('data-title');
+                        var lng=$("#tipBox ul li").eq(liIndex).attr('data-lng');
+                        var lat=$("#tipBox ul li").eq(liIndex).attr('data-lng');
+                        console.log(title);
+                        console.log(lng);
+                        console.log(lat);
+                        var marker=new  AMap.Marker({
+                            title:title,
+                            position:[lng,lat],
+                            code:'00001',
+                            icon:"./images/lu.png"
+                        });
+                        searchMarker.push(marker);
+                        mapObj.clearMap();
+                        marker.setMap(mapObj);
+                        //添加我的位置
+                        mapObj.add(myMarker);
+                        mapObj.setCenter([lng,lat]);
+                        AMap.event.addListener(marker, 'click', _onClickTwo);
+                    }
+                    //点击一级标注 标注消失
+                    var _onClickOne=function (e) {
+                        console.log(e);
+                        var position="";
+                        if(e.target.G){
+                            position=e.target.G.position;
+                        }else {
+                            position=e.target.Pg.position;
+                        }
+
+//                        console.log(position);
+//                        mapObj.remove(markers);
+                        mapObj.setZoom(13);
+                        mapObj.setCenter(position);
+//                        console.log(e.target.G.code);
+//                        console.log(e.target.getTitle());
+//                        console.log(e.target.getPosition());
+                    };
+                    //点击二级菜单显示详情
+                    var _onClickTwo=function (e) {
+                        //打印点击的位置编码
+//                        console.log(e.target.G.code);
+//                        console.log(e.target.G);
+                        var info=[];
+//                        info.push("<div><div><img style=\"float:left;\" src=\" https://webapi.amap.com/images/autonavi.png \"/></div> ");
+//                        info.push("<div style=\"padding:0px 0px 0px 4px;\"><b>"+e.target.G.title+"</b>");
+//                        info.push("电话 : 010-84107000   邮编 : 100102");
+//                        info.push("地址 :北京市朝阳区望京阜荣街10号首开广场4层</div></div>");
+                        var targetAll={};
+                        if(e.target.G){
+                            targetAll=e.target.G;
+                        }else {
+                            targetAll=e.target.Pg;
+                        }
+                        //发送ajax
+                        var div='<div class="locName">\n' +
+                            '    <p class="name">网点地点名称：'+targetAll.title+'</p>\n' +
+                            '    <span class="close">×</span>\n' +
+                            '    <div class="imgBox">\n' +
+                            '        <img src="./images/zmz.jpg" class="photo" alt="" title="正面照" style="margin-right: 5px ">\n' +
+                            '        <img src="./images/hjz.jpg" class="photo" alt="" title="环境照">\n' +
+                            '    </div>\n' +
+                            '    <p class="margingBottom paddLeft15">地址：'+targetAll.address+' </p>\n' +
+                            '    <p class="margingBottom paddLeft15">联系人：张三</p>\n' +
+                            '    <p class="margingBottom paddLeft15">联系电话：1888888888888</p>\n' +
+                            '    <p class="margingBottom phoneditup" id="gothere" data-position='+targetAll.position+'><span class="gothere">去这里</span></p>\n' +
+                            '</div>';
+                        //窗口的出现
+                        infoWindow = new AMap.InfoWindow({
+                            isCustom:true,
+                            content: div,  //使用默认信息窗体框样式，显示信息内容
+                            closeWhenClickMap:true,
+                            position:e.target.getPosition()
+                        });
+                        infoWindow.open(mapObj);
+
+                    };
+                    //点击关闭窗口
+                    $("body").delegate(".close","click",function (evt) {
+                        evt.stopPropagation();
+                        infoWindow.close(mapObj);
+                    });
+                    //出现路线图
+                    var dataPosition="";
+                    $("body").delegate("#gothere","click",function (evt) {
+                        evt.stopPropagation();
+                        infoWindow.close(mapObj);
+                        haveway=true;
+                        dataPosition=$(this).attr("data-position").split(",");
+//                            dataPosition.push( );
+//                        console.log(dataPosition);
+//                        console.log(myPositio);
+//                        console.log(e.target.getPosition());
+                        $("#distanceBox,#acceptanceType").slideUp();
+                        $("#goType").slideDown();
+                        //获取路线图的出行方案
+
+                        hawtoGo();
+
+                    });
+                    //路线图的切换
+                    $("body").delegate(".routimgBox","click",function () {
+                        $(this).find(".routeImg").addClass("option1");
+                        $(this).siblings().find(".routeImg").removeClass("option1");
+                        mapObj.clearMap();
+
+                        $("#panel").empty();
+                        if($("#destination").val()){
+                            hawtogo()
+                        }
+
+                    });
+                    //查找路线输入框
+                    $("#destination").keyup(function (e) {
+                        var key =e.keyCode;
+                        if(key===13){
+                            mapObj.setZoom(13);
+                            mapObj.setCenter(myPositio);
+                            mapObj.clearMap();
+                            if($("#destination").val()){
+//                                console.log(222);
+                                hawtogo()
+                            }
+                        }
+
+
+                    });
+                    //不搜索直接去
+                    function hawtoGo() {
+                        mapObj.clearMap();
+                        $("#panel").empty();
+                        var routeType=$(".goType").find("option:selected").attr("data-type");
+                        if(routeType==="walk"){
+                            //步行导航
+                            AMap.service(["AMap.Walking"], function() {
+                                var MWalk = new AMap.Walking({
+                                    city:"北京",
+                                    map: mapObj,
+//                                    panel: "panel",
+                                    autoFitView:false
+                                });
+                                MWalk.search(myPositio,dataPosition, function(status, result){
+                                });
+                            });
+                        }else
+                        if(routeType==="bus"){
+                            AMap.service('AMap.Transfer',function(){
+                                var transfer= new AMap.Transfer({
+                                    city:"北京",
+                                    map: mapObj,
+//                                    panel: "panel",
+                                    autoFitView:false
+                                });
+                                transfer.search(myPositio, dataPosition, function(status, result) {
+                                });
+                            });
+                        }else
+                        if(routeType==="car"){
+                            AMap.service('AMap.Driving',function(){
+                                driving= new AMap.Driving({
+                                    city:"北京",
+                                    map: mapObj,
+//                                    panel: "panel",
+                                    autoFitView:false
+                                });
+                                driving.search(myPositio, dataPosition, function(status, result) {
+                                });
+                            })
+                        }
+                    };
+                    //搜索获取关键字子去
+                    function hawtogo() {
+                        var routeType=$(".routeTypeBox").find(".option1").attr("data-type");
+                        var destination=$("#destination").val();
+                        haveway=true;
+                        console.log(haveway);
+                        if(routeType==="walk"){
+                            //步行导航
+                            AMap.service(["AMap.Walking"], function() {
+                                var MWalk = new AMap.Walking({
+                                    city:"北京",
+                                    map: mapObj,
+//                                    panel: "panel",
+                                    autoFitView:false
+                                });
+                                MWalk.search([{keyword:formattedAddress},{keyword:destination}], function(status, result){
+//
+                                });
+                            });
+                        }else
+                        if(routeType==="bus"){
+                            AMap.service('AMap.Transfer',function(){
+                                var transfer= new AMap.Transfer({
+                                    city:"北京",
+                                    map: mapObj,
+//                                    panel: "panel",
+                                    autoFitView:false
+                                });
+                                transfer.search([{keyword:formattedAddress},{keyword:destination}], function(status, result) {
+                                });
+                            });
+                        }else
+                        if(routeType==="car"){
+                            AMap.service('AMap.Driving',function(){
+                                driving= new AMap.Driving({
+                                    city:"北京",
+                                    map: mapObj,
+//                                    panel: "panel",
+                                    autoFitView:false
+                                });
+                                driving.search([{keyword:formattedAddress},{keyword:destination}], function(status, result) {
+                                });
+                            })
+                        }
+                    };
+                    //点击关闭按钮弹框关闭
+                    //点击关闭   关闭路线图
+                    $("#routeClose").click(function () {
+                        $("#routeBox").slideUp();
+//                  formattedAddress      mapObj.clearMap();
+                        $("#panel").empty();
+                        searchMarker=[];
+                        markersShow();
+                    });
+
+                    //创建空数组收留标记点
+                    var markers=[]; //一级标注
+                    var markersRoundTwo=[]; //二级周边 派出所
+                    var markersRoundDJ=[];//二级周边 中心站 登记卡居住证
+                    var markersRoundD=[];//二级周边 中心站 登记卡
+                    var markersAlltwo=[];//二级全部 派出所
+                    var markersAllDJ=[];//二级全部 中心站 登记卡 居住证
+                    var markersAllD=[];//二级全部 中心站 登记卡
+                    //为地图添加一级标注
+                    for(var i=0;i<res.data3.length;i++){
+                        var markersone=createMarker(res.data3[i]);
+                        markers.push(markersone);
+                        //为一级标注点添加点击事件
+                        AMap.event.addListener(markersone, 'click', _onClickOne);
+                    }
+                    //为地图添加二级标注
+                    for(var i=0;i<res.data1.length;i++){
+                        //判断标记点离我的距离
+                        if(lnglat.distance([res.data1[i].lng, res.data1[i].lat])<2000){
+                            if(res.data1[i].type==="1"){
+                                //派出所类型为1 只能办理居住证
+                                var markerRoundTwo=createMarkerTwo(res.data1[i]);
+                                markersRoundTwo.push(markerRoundTwo);
+                                //为二级标注添加点击事件
+                                AMap.event.addListener(markerRoundTwo, 'click', _onClickTwo);
+                            }else if(res.data1[i].type==="2"){
+                                //中心站的类型定义为2、3  2登记卡居住证都能办理
+                                var markerRoundDJ=createMarkerTwo(res.data1[i]);
+                                markersRoundDJ.push(markerRoundDJ);
+                                AMap.event.addListener(markerRoundDJ, 'click', _onClickTwo);
+                            }else if(res.data1[i].type==="3"){
+                                //中心站的类型定义为2、3  3只能居住证办理
+                                var markerRoundD=createMarkerTwo(res.data1[i]);
+                                markersRoundD.push(markerRoundD);
+                                AMap.event.addListener(markerRoundD, 'click', _onClickTwo);
+                            }
+                        }else {
+                            //无距离的限制
+                            if(res.data1[i].type==="1"){
+                                //派出所类型为1 只能办理居住证
+                                var markerAlltwo=createMarkerTwo(res.data1[i]);
+                                markersAlltwo.push(markerAlltwo);
+                                //为二级标注添加点击事件
+                                AMap.event.addListener(markerAlltwo, 'click', _onClickTwo);
+                            }else if(res.data1[i].type==="2"){
+                                //中心站的类型定义为2、3  2登记卡居住证都能办理
+                                var markerAllDJ=createMarkerTwo(res.data1[i]);
+                                markersAllDJ.push(markerAllDJ);
+                                AMap.event.addListener(markerAllDJ, 'click', _onClickTwo);
+                            }else if(res.data1[i].type==="3"){
+                                //中心站的类型定义为2、3  3只能居住证办理
+                                var markerAllD=createMarkerTwo(res.data1[i]);
+                                markersAllD.push(markerAllD);
+                                AMap.event.addListener(markerAllD, 'click', _onClickTwo);
+                            }
+                        }
+
+                    }
+                    //地图放大倍数
+                    var _onZoomEnd = function(e) {
+                            markersShow();
+
+                    };
+                    //地图尺寸大小的改变监听
+                    AMap.event.addListener(mapObj, 'zoomend', _onZoomEnd);
+
+                    function markersShow() {
+
+                        console.log(haveway);
+                        //判断是否有路线
+                        if(!haveway){
+                            mapObj.clearMap();
+                            //添加我的位置
+                            mapObj.add(myMarker);
+                            //判断地图缩放级别
+                            if(mapObj.getZoom()>12){
+                                mapObj.remove(markers);
+                                //限制条件为全部
+                                if($("#distanceBox").find("option:selected").attr("data-type")==="all"){
+                                    //限制条件为全部受理点
+                                    if($("#acceptanceType").find("option:selected").attr("data-type")==="allType"){
+                                        mapObj.add(markersRoundTwo);
+                                        mapObj.add(markersRoundDJ);
+                                        mapObj.add(markersRoundD);
+                                        mapObj.add(markersAlltwo);
+                                        mapObj.add(markersAllDJ);
+                                        mapObj.add(markersAllD);
+                                    }else if($("#acceptanceType").find("option:selected").attr("data-type")==="djkType"){
+                                        //受限条件为登记卡受理点
+                                        mapObj.add(markersRoundDJ);
+                                        mapObj.add(markersRoundD);
+                                        mapObj.add(markersAllDJ);
+                                        mapObj.add(markersAllD);
+                                    }else if($("#acceptanceType").find("option:selected").attr("data-type")==="jzzType"){
+                                        //受限条件为居住证受理网店
+                                        mapObj.add(markersRoundTwo);
+                                        mapObj.add(markersRoundDJ);
+                                        mapObj.add(markersAlltwo);
+                                        mapObj.add(markersAllDJ);
+                                    }
+                                    circle.setMap();
+                                }
+                                else if($("#distanceBox").find("option:selected").attr("data-type")==="near"){
+                                    if($("#acceptanceType").find("option:selected").attr("data-type")==="allType"){
+                                        mapObj.add(markersRoundTwo);
+                                        mapObj.add(markersRoundDJ);
+                                        mapObj.add(markersRoundD);
+                                    }else if($("#acceptanceType").find("option:selected").attr("data-type")==="djkType"){
+                                        //受限条件为登记卡受理点
+                                        mapObj.add(markersRoundDJ);
+                                        mapObj.add(markersRoundD);
+                                    }else if($("#acceptanceType").find("option:selected").attr("data-type")==="jzzType"){
+                                        //受限条件为居住证受理网店
+                                        mapObj.add(markersRoundTwo);
+                                        mapObj.add(markersRoundDJ);
+                                    }
+                                    circle.setMap(mapObj);
+                                }
+                                //限制条件为全部
+//                            if($("#condition").find("option:selected").attr("data-type")==="all"){
+//                                //限制条件为全部受理点
+//                                if($("#conditionType").find("option:selected").attr("data-type")==="all"){
+//                                    mapObj.add(markersRoundTwo);
+//                                    mapObj.add(markersRoundDJ);
+//                                    mapObj.add(markersRoundD);
+//                                    mapObj.add(markersAlltwo);
+//                                    mapObj.add(markersAllDJ);
+//                                    mapObj.add(markersAllD);
+//                                }else if($("#conditionType").find("option:selected").attr("data-type")==="jzz"){
+//                                    mapObj.add(markersRoundTwo);
+//                                    mapObj.add(markersRoundDJ);
+//                                    mapObj.add(markersAlltwo);
+//                                    mapObj.add(markersAllDJ);
+//                                }else if($("#conditionType").find("option:selected").attr("data-type")==="djk"){
+//                                    mapObj.add(markersRoundDJ);
+//                                    mapObj.add(markersRoundD);
+//                                    mapObj.add(markersAllDJ);
+//                                    mapObj.add(markersAllD);
+//                                }
+//                                circle.setMap();
+//                            }else if($("#condition").find("option:selected").attr("data-type")==="around"){
+//                                if($("#conditionType").find("option:selected").attr("data-type")==="all"){
+//                                    mapObj.add(markersRoundTwo);
+//                                    mapObj.add(markersRoundDJ);
+//                                    mapObj.add(markersRoundD);
+//                                }else if($("#conditionType").find("option:selected").attr("data-type")==="jzz"){
+//                                    mapObj.add(markersRoundTwo);
+//                                    mapObj.add(markersRoundDJ);
+//                                }else if($("#conditionType").find("option:selected").attr("data-type")==="djk"){
+//                                    mapObj.add(markersRoundDJ);
+//                                    mapObj.add(markersRoundD);
+//                                }
+//                                circle.setMap(mapObj);
+//                            }
+                            }else if(mapObj.getZoom()<=12){
+                                mapObj.add(markers);
+                                circle.setMap();
+                            }
+                        }
+
+                    }
+                    markersShow();
+                    //周边和全部
+                    $("#distanceBox").change(function () {
+//                        $(this).addClass("bule").siblings().removeClass("bule");
+//                        $("#searchBoxOne").slideDown();
+                        markersShow();
+                    });
+                    //网点办理类型
+                    $("#acceptanceType").change(function () {
+                        markersShow();
+                    });
+                    //出发路线
+                    $("#goType").change(function () {
+                        hawtoGo()
+                    })
+
+                },
+                error:function (err) {
+                    console.log(err);
+                }
+
+            })
+
+        }
+        function onError(onErrorData) {
+
+        }
+    })
+</script>
+</body>
+</html>
